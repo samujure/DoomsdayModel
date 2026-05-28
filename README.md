@@ -13,33 +13,33 @@ This distinction is the core of the model.
 
 ## What the model actually estimates
 
-For each domain \(d\), define:
+For each domain $d$, define:
 
-\[
+```math
 D_d = \text{domain } d \text{ enters severe danger / escalation state within horizon } T
-\]
+```
 
-\[
+```math
 C_d = \text{domain } d \text{ experiences catastrophe within horizon } T
-\]
+```
 
 The target is decomposed as:
 
-\[
+```math
 P(C_d \mid \mathcal F_t)
 =
 P(D_d \mid \mathcal F_t)
 \cdot
 P(C_d \mid D_d, \mathcal F_t)
-\]
+```
 
-where \(\mathcal F_t\) is the information available at time \(t\).
+where $\mathcal F_t$ is the information available at time $t$.
 
 ### 1. Danger-state probability
 
-\[
+```math
 P(D_d \mid \mathcal F_t)
-\]
+```
 
 This is the data-driven part. Historical crises, close calls, escalation episodes, conflict events, disease outbreaks, climate indicators, and capability milestones can help infer the probability of entering severe danger states.
 
@@ -51,9 +51,9 @@ This layer is estimated with:
 
 ### 2. Conditional catastrophe probability
 
-\[
+```math
 P(C_d \mid D_d, \mathcal F_t)
-\]
+```
 
 This is not learned directly from historical catastrophe frequency. There are too few true existential or civilizational catastrophes to estimate such rates frequentistically.
 
@@ -81,7 +81,7 @@ A **Hidden Markov Model** captures slow-moving structural risk. Climate, AI capa
 
 The two components are fused per domain. The weighted fusion is the interpretable baseline:
 
-\[
+```math
 p_{\text{danger},d}(t)
 =
 w_1
@@ -91,20 +91,20 @@ w_1
 +
 w_2
 \sum_k P(S_t=s_k \mid x_{1:t}) \cdot \text{danger}_k
-\]
+```
 
-where \(w_1 + w_2 = 1\).
+where $w_1 + w_2 = 1$.
 
 A logistic fusion alternative is available when sufficient labeled data exists:
 
-\[
+```math
 p_{\text{danger},d}(t)
 =
 \sigma
 \left(
 a_d + b_d^\top x_d(t) + c_d\log(1+\lambda_d(t)) + \gamma_d^\top P(z_{d,t})
 \right)
-\]
+```
 
 The weighted version is more interpretable. The logistic version is more flexible.
 
@@ -112,21 +112,21 @@ The weighted version is more interpretable. The logistic version is more flexibl
 
 For domain-state combinations, define:
 
-\[
+```math
 q_d = P(C_d \mid D_d, \mathcal F_t)
-\]
+```
 
 This is represented as a prior distribution, often a Beta distribution for bounded probabilities:
 
-\[
+```math
 q_d \sim \text{Beta}(\alpha_d,\beta_d)
-\]
+```
 
 The model therefore outputs a distribution over catastrophe probability, not fake precision.
 
 For event-driven domains:
 
-\[
+```math
 P(C_d \text{ in } [t,t+T])
 =
 1 -
@@ -135,41 +135,41 @@ P(C_d \text{ in } [t,t+T])
 -\int_t^{t+T}
 \lambda_{\text{danger},d}(s)q_d(s)\,ds
 \right)
-\]
+```
 
 For structural domains:
 
-\[
+```math
 P(C_d \mid \mathcal F_t)
 =
 \sum_k P(S_t=s_k \mid x_{1:t})r_k
-\]
+```
 
-where \(r_k=P(C_d\mid S_t=s_k)\) is a conditional-risk prior.
+where $r_k=P(C_d\mid S_t=s_k)$ is a conditional-risk prior.
 
 ### Composite risk
 
 The model uses copula-based aggregation to represent dependence between domain risks.
 
-For marginal catastrophe probabilities \(p_1,\ldots,p_5\):
+For marginal catastrophe probabilities $p_1,\ldots,p_5$:
 
-\[
+```math
 P(\text{any catastrophe within } T)
 =
 1 - C_R(1-p_1,\ldots,1-p_5)
-\]
+```
 
-where \(C_R\) is a copula over the survival probabilities.
+where $C_R$ is a copula over the survival probabilities.
 
 The Gaussian copula is the baseline. A t-copula is preferred for tail-risk modeling because it can represent stronger dependence in extreme states. Dynamic Conditional Correlation can allow the dependence matrix to tighten during simultaneous crises.
 
 The model also computes a severity-weighted systemic risk index:
 
-\[
+```math
 P\left(\sum_d w_dY_d > \tau\right)
-\]
+```
 
-where \(Y_d\) are correlated latent domain severities. This captures systemic civilizational stress better than a binary "at least one domain failed" event.
+where $Y_d$ are correlated latent domain severities. This captures systemic civilizational stress better than a binary “at least one domain failed” event.
 
 ### Clock visualization
 
@@ -177,20 +177,20 @@ The clock maps a normalized composite risk score to minutes-to-midnight. It is a
 
 In implementation, the display score is clamped to prevent invalid values:
 
-\[
+```math
 p_{\text{display}}
 =
 \text{clip}(p_{\text{composite}},p_{\min},1)
-\]
+```
 
-\[
+```math
 \text{minutes}
 =
 15\cdot
 \frac{\log(1/p_{\text{display}})}{\log(1/p_{\min})}
-\]
+```
 
-where \(p_{\min}\) is the safest historical baseline.
+where $p_{\min}$ is the safest historical baseline.
 
 ---
 
@@ -214,11 +214,11 @@ Example:
 
 > Nuclear catastrophe probability within 12 months: median 0.3%, 90% credible interval [0.02%, 1.1%].
 
-The exact value depends on the conditional-risk prior \(q\), which is explicit and adjustable.
+The exact value depends on the conditional-risk prior $q$, which is explicit and adjustable.
 
 ### 3. Composite systemic risk index
 
-This is a 0-100 index used for the dashboard and clock visualization. It is not necessarily a literal probability.
+This is a 0–100 index used for the dashboard and clock visualization. It is not necessarily a literal probability.
 
 ---
 
@@ -228,13 +228,13 @@ All sources are publicly accessible. No proprietary datasets are required.
 
 ### Continuous signals
 
-- NOAA Mauna Loa CO2, 1958-present.
-- NASA GISS temperature anomaly, 1880-present.
-- Our World in Data / FAS nuclear warhead estimates, 1945-present.
-- SIPRI arms transfers and military expenditure, 1949/1950-present depending on dataset.
-- NSIDC Arctic sea ice extent, satellite era from 1978-present.
+- NOAA Mauna Loa CO₂, 1958–present.
+- NASA GISS temperature anomaly, 1880–present.
+- Our World in Data / FAS nuclear warhead estimates, 1945–present.
+- SIPRI arms transfers and military expenditure, 1949/1950–present depending on dataset.
+- NSIDC Arctic sea ice extent, satellite era from 1978–present.
 - Epoch AI notable/frontier model data.
-- UCDP/PRIO armed conflict data, 1946-present.
+- UCDP/PRIO armed conflict data, 1946–present.
 - V-Dem democracy and institutional indicators.
 
 ### Event feeds
@@ -260,7 +260,7 @@ Epoch AI model data is selection-biased toward notable, published, or otherwise 
 
 ### Danger-state backtesting
 
-The model is run historically using only information available at each time step. It should spike during known danger periods such as the Cuban Missile Crisis, Able Archer 83, and post-2014 geopolitical deterioration, and subside during detente periods.
+The model is run historically using only information available at each time step. It should spike during known danger periods such as the Cuban Missile Crisis, Able Archer 83, and post-2014 geopolitical deterioration, and subside during détente periods.
 
 Evaluation metrics:
 
@@ -295,7 +295,7 @@ BAS Doomsday Clock positions are used only as coarse historical alignment target
 | Methodology | Expert panel statement | Hawkes + HMM + copula + Bayesian priors |
 | Transparency | Qualitative | Open specification |
 | Reproducibility | No | Same inputs produce same outputs |
-| Probability target | Undefined | Danger state x conditional catastrophe risk |
+| Probability target | Undefined | Danger state × conditional catastrophe risk |
 | Uncertainty quantification | None | Credible intervals |
 | Correlation modeling | Informal | Copula / tail dependence |
 | Calibration | None published | Brier, log score, PIT, reliability diagrams |
@@ -304,88 +304,28 @@ BAS Doomsday Clock positions are used only as coarse historical alignment target
 
 ## Quickstart
 
-The current repository contains the mock-first asset pipeline and React dashboard shell. It does not yet contain the real ingestion, backtesting, or probabilistic modeling modules.
-
 ```bash
-npm install
-python scripts/generate_assets.py --mock
-python scripts/validate_assets.py
-npm run dev
+git clone https://github.com/YOUR_USERNAME/doomsday-model.git
+cd doomsday-model
+pip install -e .
+
+# Download core datasets
+python -m src.ingestion.download --all
+
+# Run historical retrodiction
+python -m src.backtest.retrodiction --start 1945 --end 2025
+
+# Launch dashboard
+cd dashboard && npm install && npm run dev
 ```
 
-Useful development commands:
-
-```bash
-# Build the frontend
-npm run build
-
-# Rebuild the asset manifest
-python scripts/build_manifest.py
-
-# Generate mock assets only
-python scripts/generate_assets.py --mock
-
-# Generate one mock world state
-python scripts/generate_world_plate.py --state alive --region global --time evening --seed 101 --mock true
-```
-
-Requires Python 3.10+ and Node 18+.
-
----
-
-## GPU handoff
-
-The current machine should prove the mock pipeline, manifest generation, and dashboard shell only. Do not debug SDXL, CUDA, MPS, model downloads, or GPU installs here.
-
-After the mock website works:
-
-1. Clone the repo onto the RTX 4070 laptop.
-2. Create a Python virtual environment.
-3. Install the PyTorch CUDA build.
-4. Install `diffusers`, `transformers`, `accelerate`, `safetensors`, and image-processing dependencies.
-5. Run the mock pipeline again to verify the repo works.
-6. Run one SDXL master `alive` generation.
-7. Run one img2img state variant.
-8. Only then batch-generate candidates.
-
-First SDXL master test:
-
-```bash
-python scripts/generate_master_alive.py \
-  --region global \
-  --time evening \
-  --seed 101 \
-  --width 1024 \
-  --height 576 \
-  --steps 25 \
-  --mock false
-```
-
-First img2img variant test:
-
-```bash
-python scripts/derive_state_variant.py \
-  --input assets_source/selected/master_alive.png \
-  --state burning \
-  --strength 0.35 \
-  --seed 201
-```
-
-Recommended img2img strengths:
-
-- `warming`: `0.20-0.30`
-- `burning`: `0.30-0.45`
-- `inferno`: `0.40-0.55`
-- `burnt`: `0.45-0.60`
-- `recovering`: `0.30-0.45`
-
-Use low strength to preserve the same city composition across states.
+Requires Python 3.10+ and Node 18+. GDELT BigQuery access requires a Google Cloud account. ACLED requires free academic registration.
 
 ---
 
 ## Current status
 
-The dashboard prototype is complete with mock data, mock live events, manually switchable risk states, and a mock-first pixel-art asset pipeline. The real modeling and ingestion pipeline are under active development.
+The dashboard prototype is complete with simulated data. The real modeling and ingestion pipeline are under active development.
 
 ---
 
