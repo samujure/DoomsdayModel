@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "doomsday-model-assets"
+version = "0.1.0"
+description = "Mock-first pixel-art asset pipeline for the Doomsday Model website shell."
+requires-python = ">=3.8"
+dependencies = [
+  "pillow>=10.0.0",
+  "numpy>=1.24.0"
+]
+
+[project.optional-dependencies]
+sdxl = [
+  "torch",
+  "diffusers",
+  "transformers",
+  "accelerate",
+  "safetensors",
+  "opencv-python",
+  "scikit-learn",
+  "imageio"
+]
+
+[tool.setuptools.packages.find]
+include = ["asset_pipeline*"]

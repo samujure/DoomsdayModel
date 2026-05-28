@@ -1,0 +1,66 @@
+{
+  "logo": {
+    "earthOrbit32": "/assets/logo/earth_orbit_32.png",
+    "earthOrbit64": "/assets/logo/earth_orbit_64.png",
+    "earthOrbit128": "/assets/logo/earth_orbit_128.png",
+    "earthOrbit256": "/assets/logo/earth_orbit_256.png"
+  },
+  "worlds": {
+    "global": {
+      "day": {
+        "alive": {
+          "plate": "/assets/worlds/global/day/alive/world_plate.webp"
+        }
+      },
+      "evening": {
+        "alive": {
+          "plate": "/assets/worlds/global/evening/alive/world_plate.webp"
+        },
+        "warming": {
+          "plate": "/assets/worlds/global/evening/warming/world_plate.webp"
+        },
+        "burning": {
+          "plate": "/assets/worlds/global/evening/burning/world_plate.webp"
+        },
+        "inferno": {
+          "plate": "/assets/worlds/global/evening/inferno/world_plate.webp"
+        },
+        "burnt": {
+          "plate": "/assets/worlds/global/evening/burnt/world_plate.webp"
+        },
+        "recovering": {
+          "plate": "/assets/worlds/global/evening/recovering/world_plate.webp"
+        }
+      },
+      "night": {
+        "alive": {
+          "plate": "/assets/worlds/global/night/alive/world_plate.webp"
+        }
+      }
+    }
+  },
+  "fx": {
+    "clouds": [
+      "/assets/fx/clouds/cloud_01.png",
+      "/assets/fx/clouds/cloud_02.png",
+      "/assets/fx/clouds/cloud_03.png"
+    ],
+    "smoke": [
+      "/assets/fx/smoke/smoke_heavy_01.png",
+      "/assets/fx/smoke/smoke_light_01.png"
+    ],
+    "fire": [
+      "/assets/fx/fire/fire_large_01.png",
+      "/assets/fx/fire/fire_roof_01.png",
+      "/assets/fx/fire/fire_small_01.png"
+    ],
+    "particles": {
+      "ember": "/assets/fx/particles/ember_01.png",
+      "ash": "/assets/fx/particles/ash_01.png",
+      "rain": "/assets/fx/particles/rain_streak_01.png"
+    },
+    "birds": [
+      "/assets/fx/birds/bird_01.png"
+    ]
+  }
+}
